@@ -10,9 +10,12 @@ fizzbuzz = [if x `mod` 15==0
                     else show x | x <- [1..]]
 
 ---2---
---dotsInCircle :: (Double, Double) -> Double -> [(Double,Double)] -> [(Double, Double)]
---dotsInCircle xs r ys = 
-
+dotsInCircle :: (Double, Double) -> Double -> [(Double,Double)] -> [(Double, Double)]
+dotsInCircle (r_x, r_y) r cords = [cur | cur<-cords, check_if_coords_in r_x r_y r (fst cur) (snd cur)]
+    where check_if_coords_in r_x r_y r x y| (x > (r_x-r) && x < (r_x+r)) && (y > (r_y-r) && y < (r_y+r)) = True
+                                          | otherwise = False
+-- dotsInCircle (1, 1) 3 [(0, 0), (1, 2), (12, 24)]
+-- dotsInCircle ((-3), 3) 6 [(0, 0), ((-2), 1), (12, 24), (3, 3), ((-1.5), 2)]
 ---3---
 setAnd :: [Int] -> [Int] -> [Int]
 setAnd xs ys = [x | x<-xs,y<-ys, x==y]
@@ -22,7 +25,8 @@ setAnd xs ys = [x | x<-xs,y<-ys, x==y]
 ---1---
 sumdigit :: Int -> Int
 sumdigit 0 = 0
-sumdigit x = (x `mod` 10)  + sumdigit (x `div` 10)
+sumdigit x  |x>0 = (x `mod` 10)  + sumdigit (x `div` 10)
+            |x<0 = sumdigit (x*(-1))
 ---2---
 cndigit :: Int -> Int
 cndigit x =  counter 1 x
@@ -48,8 +52,7 @@ colatz_step x = cn 0 x
 colatz_max :: Int -> Int
 colatz_max x = mx 0 x
     where 
-        mx m n =if (n `mod` 2==0) then mx m (n `div` 2) else if (n==1) then m else mx (max m (n*3 +1)) (n*3 +1)
-
+        mx m n =if (n `mod` 2==0) then mx (max m n) (n `div` 2) else if (n==1) then (max m n) else mx (max m (n*3 +1)) (n*3 +1)
 ---7---
 log_dv :: Int -> Int
 log_dv x   | x<=0 = error "don,t exist"
