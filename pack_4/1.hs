@@ -1,3 +1,4 @@
+import Data.Char
 ---------------pac_4---------------
 -----string-----
 --printf(string, [args])
@@ -26,7 +27,9 @@ from_n_to_decem n x = fst (foldl (\(acc, pow) x -> ((acc + x*(n^pow)), pow+1)) (
 
 --3
 num_from_string :: String -> Int
-num_from_string x = foldl  (\acc y -> read y + acc) 0 [x]
+num_from_string all@(x:xs) | x == '-' = (solver xs) * (-1)
+                           | otherwise = solver all
+      where solver x = fst(foldr  (\y (acc, decet)-> ((ord y - 48) * decet + acc, decet*10)) (0, 1) x)
 --4
 search_n :: [Int] -> Int
 search_n x = (((count x) * ((count x) + 1)) `div` 2) - summ x
