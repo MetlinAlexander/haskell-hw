@@ -54,7 +54,10 @@ areEqualBin file_1 file_2 = do
         handle_2 <- openFile file_2 ReadMode
         contents_1 <- B.hGetContents handle_1
         contents_2 <- B.hGetContents handle_2
-        return (contents_1 == contents_2)
+        let rez = (contents_1 == contents_2)
+        hClose handle_1
+        hClose handle_2
+        return rez
 
 -- areEqualBin "test1.txt" "test2.txt"
 -- areEqualBin "test1.txt" "pac7.hs"
