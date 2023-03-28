@@ -1,3 +1,4 @@
+import Data.List
 
 data DogBreed = GoldenRetrievers
               | BostonTerriers
@@ -105,16 +106,13 @@ extended_dogs = dogs ++ extra_dogs
 -- using do-notation, find such dogs, that they are male, 4-5 years old, not IrishSetter, good boys
 -- and such dogs, that they are female, 4-5 years old, name is longer then 4 symbols
 -- after finding those two groups, combine a list of all combinations they could be mated
-dogsQuery :: [(Dog, Dog)]
+
+
+dogsQuery :: [[(Dog, Dog)]]--[[(Dog, Dog)]]
 dogsQuery = do
-       dog1 <- [cur_dog | cur_dog <- extended_dogs, (gender cur_dog == Male), (age cur_dog == 4 || age cur_dog == 5), (breed cur_dog /= IrishSetter), isGoodBoy cur_dog]
-       dog2 <- [cur_dog | cur_dog <- extended_dogs, (gender cur_dog == Female), (age cur_dog == 4 || age cur_dog == 5), (length (name cur_dog) > 4)]
-       return (dog1, dog2)
-{-
-[(Dog {name = "Zyzz", age = 5, gender = Male, breed = Beagle, isGoodBoy = True},Dog {name = "Iacchus", age = 4, gender = Female, breed = Beagle, isGoodBoy = True}),
-(Dog {name = "Zyzz", age = 5, gender = Male, breed = Beagle, isGoodBoy = True},Dog {name = "Gerda", age = 5, gender = Female, breed = IrishSetter, isGoodBoy = False}),
-(Dog {name = "Zyzz", age = 5, gender = Male, breed = Beagle, isGoodBoy = True},Dog {name = "Loonie", age = 4, gender = Female, breed = GoldenRetrievers, isGoodBoy = True}),
-(Dog {name = "Volt", age = 4, gender = Male, breed = Poodles, isGoodBoy = True},Dog {name = "Iacchus", age = 4, gender = Female, breed = Beagle, isGoodBoy = True}),
-(Dog {name = "Volt", age = 4, gender = Male, breed = Poodles, isGoodBoy = True},Dog {name = "Gerda", age = 5, gender = Female, breed = IrishSetter, isGoodBoy = False}),
-(Dog {name = "Volt", age = 4, gender = Male, breed = Poodles, isGoodBoy = True},Dog {name = "Loonie", age = 4, gender = Female, breed = GoldenRetrievers, isGoodBoy = True})]
--}
+       -- dog1 <- [cur_dog | cur_dog <- extended_dogs, (gender cur_dog == Male), (age cur_dog == 4 || age cur_dog == 5), (breed cur_dog /= IrishSetter), isGoodBoy cur_dog]
+       -- dog2 <- [cur_dog | cur_dog <- extended_dogs, (gender cur_dog == Female), (age cur_dog == 4 || age cur_dog == 5), (length (name cur_dog) > 4)]
+       return $ concat $ [ zip cur_list_1 cur_list_2 | cur_list_1 <- dog1, cur_list_2 <- dog2]-- (permutations dog2)
+       where dog1 = permutations $ [cur_dog | cur_dog <- extended_dogs, (gender cur_dog == Male), (age cur_dog == 4 || age cur_dog == 5), (breed cur_dog /= IrishSetter), isGoodBoy cur_dog]
+             dog2 = permutations $ [cur_dog | cur_dog <- extended_dogs, (gender cur_dog == Female), (age cur_dog == 4 || age cur_dog == 5), (length (name cur_dog) > 4)]
+
