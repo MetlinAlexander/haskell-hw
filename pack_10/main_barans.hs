@@ -27,21 +27,32 @@ grandgrandfather cur_sheep = do
 
 -- all_parents :: Sheep -> [Maybe Sheep]
 -- all_parents cur_sheep = [father cur_sheep, mother cur_sheep]
-all_parents :: Sheep -> Maybe [Sheep]
-all_parents cur_sheep = do
-    cur_mother <- mother cur_sheep
-    cur_father <- father cur_sheep
-    return [cur_father, cur_mother]
+-- all_parents :: Sheep -> Maybe [Sheep]
+-- all_parents cur_sheep = do
+--     cur_mother <- mother cur_sheep
+--     cur_father <- father cur_sheep
+--     return [cur_father, cur_mother]
+all_parents :: Sheep -> [Sheep]
+all_parents cur_sheep = (if (mother cur_sheep)==Nothing then [] else [fromJust $  mother cur_sheep]) ++ 
+                        (if (father cur_sheep)==Nothing then [] else [fromJust $  father cur_sheep])
 
 -- all_parents "i1" -> Nothing
 -- all_parents "i12" -> Just ["i6","i11"]
 
-all_grandparents :: Sheep -> Maybe [[Sheep]]
-all_grandparents cur_sheep = do
-    parents <- all_parents cur_sheep
-    mother_parents <- all_parents (last parents)
-    father_parents <- all_parents (head parents)
-    return [mother_parents, father_parents]
+-- all_grandparents :: Sheep -> Maybe [[Sheep]]
+-- all_grandparents cur_sheep = do
+--     parents <- all_parents cur_sheep
+--     mother_parents <- all_parents (last parents)
+--     father_parents <- all_parents (head parents)
+--     return [mother_parents, father_parents]
+
+all_grandparents :: Sheep -> [[Sheep]]
+all_grandparents cur_sheep = map (all_parents) $ all_parents cur_sheep
+                where helper list = [all_parents cur | cur <- list ]
+
+-- all_grandparents :: Sheep -> [[Sheep]]
+-- all_grandparents cur_sheep =helper $ all_parents cur_sheep
+--                 where helper list = [all_parents cur | cur <- list ]
 
 -- all_grandparents "i12" -> Just [["i7","i3"],["i5","i3"]]
 -- all_grandparents "i13" -> Nothing
@@ -50,7 +61,7 @@ all_grandparents cur_sheep = do
 -- No parents -> Sirota
 
 sirota :: Sheep -> Bool
-sirota cur_sheep    | (all_parents cur_sheep) == Nothing = True
+sirota cur_sheep    | (all_parents cur_sheep) == [] = True
                     | otherwise = False
 -- sirota "i12" -> False
 
