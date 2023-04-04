@@ -1,7 +1,7 @@
 import Barans
-
-fromJust :: Maybe a -> a
-fromJust (Just t) = t
+import Data.Maybe
+-- fromJust :: Maybe a -> a
+-- fromJust (Just t) = t
 
 -- 1. Найти дедушку -- отца матери
 grandfathers :: Sheep -> Maybe Sheep
@@ -33,8 +33,10 @@ grandgrandfather cur_sheep = do
 --     cur_father <- father cur_sheep
 --     return [cur_father, cur_mother]
 all_parents :: Sheep -> [Sheep]
-all_parents cur_sheep = (if (mother cur_sheep)==Nothing then [] else [fromJust $  mother cur_sheep]) ++ 
-                        (if (father cur_sheep)==Nothing then [] else [fromJust $  father cur_sheep])
+all_parents cur_sheep = map (fromJust) $ filter (isJust) parent'
+    where parent' = [father cur_sheep, mother cur_sheep]
+    -- (if (mother cur_sheep)==Nothing then [] else [fromJust $  mother cur_sheep]) ++ 
+    --                     (if (father cur_sheep)==Nothing then [] else [fromJust $  father cur_sheep])
 
 -- all_parents "i1" -> Nothing
 -- all_parents "i12" -> Just ["i6","i11"]
